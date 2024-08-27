@@ -1,5 +1,6 @@
 #include <curses.h>
 #include <ncurses.h>
+#include "week.h"
 
 // helper functions
 int calcCellHeight(int windowHeight, int hours) {
@@ -13,12 +14,6 @@ int calcCellLength(int windowLength, int days) {
 //------------------------------------------------------------------------------
 // struct week
 //------------------------------------------------------------------------------
-struct Week {
-  int windowLength, windowHeight, days, hours, cellLength, cellHeight;
-  WINDOW *parentWindow;
-  WINDOW *cells[7][12]; // TODO: fix this so its not static: https://stackoverflow.com/questions/17250480/declaring-int-array-inside-struct
-  // probably gonna need a cell struct or something
-};
 
 // constructor
 struct Week weekConst(int days, int hours, WINDOW *pw) {

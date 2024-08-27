@@ -5,36 +5,10 @@
 #include <stdbool.h>
 #include <unistd.h>
 //#include "player.h"
-//#include "customutils.h"
-#include "day.c"
+#include "customutils.h"
+#include "week.h"
 
-int max(int a, int b) {
-  return (a>=b)*a + (b>a)*b;
-}
-
-int min(int a, int b) {
-  return (a>=b)*b + (b>a)*a;
-}
-
-// find length of string
-int stringLength(const char *string) {
-  int ret = 0;
-  while (*string != '\0') {
-    ++ret;
-    ++string;
-  }
-
-  return ret;
-}
-
-int centerString(int windowLength, int stringLength) {
-  int windowHalf = windowLength/2;
-  int stringHalf = stringLength/2;
-
-
-  return windowHalf-stringHalf-1;
-}
- /*
+/*
 void updateCell(struct Day *day, int d, int h, char *text) {
   mvwprintw(day[d].cells[h], 1, 1, text);
   refresh();
@@ -112,13 +86,9 @@ int main(int argc, char ** argv) {
   struct Week week = weekConst(numDays, numHours, mainwin);
   makeDays(&week);
   drawDays(&week);
-  /*
-  for (int i=0; i<numDays; ++i) {
-    columns[i] = dayConst(weekdays[i], cellWidth, (cellWidth-1)*i, numHours, mainwin);
-    drawDay(&columns[i]);
-  }
-  */
- 
+
+  // test writing into cells
+  updateCell(&week, 0, 2, "hewo", false);
 
   // main loop
   while (loop) {
