@@ -2,52 +2,90 @@
 #include <ncurses.h>
 
 // helper functions
-int calcCellHeight(int height, int ts) {
-  return (height/ts)+1;
+int calcCellHeight(int windowHeight, int hours) {
+  return (windowHeight/hours)+1;
+}
+
+int calcCellLength(int windowLength, int days) {
+  return (windowLength/days)+1;
 }
 
 // TODO: rename struct variables and make into matrix so it is less trash
-struct Day {
-  const char* weekday;
-  int length, height, offset, timeslots, cellHeight;
+struct Week {
+  int windowLength, windowHeight, days, hours, cellLength, cellHeight;
   WINDOW *parentWindow;
-  WINDOW *cells[12]; // TODO: fix this so its not static: https://stackoverflow.com/questions/17250480/declaring-int-array-inside-struct
+  WINDOW *cells[7][12]; // TODO: fix this so its not static: https://stackoverflow.com/questions/17250480/declaring-int-array-inside-struct
   // probably gonna need a cell struct or something
 };
 
 // constructor
-struct Day dayConst(const char* w, int l, int os, int ts, WINDOW *pw) {
-  struct Day temp;
+struct Week weekConst(int days, int hours, WINDOW *pw) {
+  struct Week temp;
 
   int _;
-  getmaxyx(pw, temp.height, _);
-  temp.weekday = w;
-  temp.length = l;
-  temp.offset = os;
-  temp.timeslots = ts;
-  temp.cellHeight = calcCellHeight(temp.height, ts); // might be wrong, test this
+  getmaxyx(pw, temp.windowHeight, temp.windowLength);
+  temp.days = days;
+  temp.hours = hours;
+  temp.cellLength = calcCellLength(temp.windowLength, temp.days);
+  temp.cellHeight = calcCellHeight(temp.windowHeight, temp.hours); // might be wrong, test this
   temp.parentWindow = pw;
-  //temp.cells[ts];
+
   return temp;
 }
 
-void drawCell(struct Day *d) {}
-
-// draw cells
-void drawDay(struct Day *d) {
-  for (int i=0; i<(d->timeslots); ++i) {
-    d->cells[i] = derwin(d->parentWindow, d->cellHeight, d->length, (d->cellHeight-1)*i, d->offset);
-    wborder(d->cells[i], 0, 0, 0, 0, ACS_PLUS, ACS_PLUS, 0, 0);
-    // test writing in cells
-    if (i == 2) {
-      mvwprintw(d->cells[i], 1, 1, "hi");
+void makeDays(struct Week *w) {
+  for (int day=0; day<(w->days); ++day) {
+    for (int hour=0; hour<(w->hours); ++hour) {
+      // init a subwindow at d.cells[day][hour]
+      w->cells[day][hour] = derwin(w->parentWindow, w->cellHeight, w->cellLength, (w->cellHeight-1)*hour, (w->cellLength-1)*day);
     }
-    refresh();
-    wrefresh(d->cells[i]);
   }
-  /* draw box around whole calendar
-  box(d->parentWindow, 0, 0);
+}
+
+void drawCell(struct Week *w, int day, int hour, bool refresh) {
+  int topleft, topright, bottomleft, bottomright;
+  topleft = topright = bottomleft = bottomright = ACS_PLUS;
+
+  // find out bordertype
+  if (day==0) {
+    topleft = bottomleft = ACS_LTEE;
+    if (hour==0) {
+      topleft = ACS_ULCORNER;
+      topright = ACS_TTEE;
+    } else if (hour==(w->hours)-1) {
+      bottomleft = ACS_LLCORNER;
+      bottomright = ACS_BTEE;
+    }
+  } else if (day==(w->days)-1) {
+    topright = bottomright = ACS_RTEE;
+     if (hour==0) {
+      topleft = ACS_TTEE;
+      topright = ACS_URCORNER;
+    } else if (hour==(w->hours)-1) {
+      bottomleft = ACS_BTEE;
+      bottomright = ACS_LRCORNER;
+    }
+  } else if (hour==0) {
+    topleft = topright = ACS_TTEE;
+  } else if (hour==(w->hours)-1) {
+    bottomleft = bottomright = ACS_BTEE;
+  }
+  
+  // draw border
+  wborder(w->cells[day][hour], 0, 0, 0, 0, topleft, topright, bottomleft, bottomright);
+  if (refresh) {
+    refresh();
+    wrefresh(w->parentWindow);
+  }
+}
+
+void drawDays(struct Week *w) {
+  for (int day=0; day<(w->days); ++day) {
+    for (int hour=0; hour<(w->hours); ++hour) {
+      // draw in drawcell so that code is more modular
+      drawCell(w, day, hour, false);
+    }
+  }
   refresh();
-  wrefresh(d->parentWindow);
-  */
+  wrefresh(w->parentWindow);
 }

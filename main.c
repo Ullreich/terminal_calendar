@@ -34,7 +34,7 @@ int centerString(int windowLength, int stringLength) {
 
   return windowHalf-stringHalf-1;
 }
-
+ /*
 void updateCell(struct Day *day, int d, int h, char *text) {
   mvwprintw(day[d].cells[h], 1, 1, text);
   refresh();
@@ -48,6 +48,7 @@ void invertCell(struct Day *day, int d, int h, int colorpair) {
   wrefresh(day[d].cells[h]);
   wattroff(day[d].cells[h], COLOR_PAIR(colorpair));
 }
+*/
 
 /*
 void moveCell(struct Day *day, int d, int h, int numDays, int numHours) {
@@ -108,11 +109,15 @@ int main(int argc, char ** argv) {
   attroff(A_BOLD);
 
   // draw all the cells
-  struct Day columns[numDays];
+  struct Week week = weekConst(numDays, numHours, mainwin);
+  makeDays(&week);
+  drawDays(&week);
+  /*
   for (int i=0; i<numDays; ++i) {
     columns[i] = dayConst(weekdays[i], cellWidth, (cellWidth-1)*i, numHours, mainwin);
     drawDay(&columns[i]);
   }
+  */
  
 
   // main loop
@@ -128,15 +133,15 @@ int main(int argc, char ** argv) {
       case KEY_DOWN:
       case KEY_LEFT:
       case KEY_RIGHT:
-        invertCell(columns, currd, currh, 1);
+        // invertCell(columns, currd, currh, 1);
         if (c==KEY_UP) {currh = max(0, currh-1);}
         else if (c==KEY_DOWN) {currh = min(numHours-1, currh+1);}
         else if (c==KEY_LEFT) {currd = max(0, currd-1);}
         else {currd = min(numDays-1, currd+1);}
-        invertCell(columns, currd, currh, 2);
+        // invertCell(columns, currd, currh, 2);
         break;
       case ' ':
-        invertCell(columns, currd, currh, 1);
+        // invertCell(columns, currd, currh, 1);
       default:
         break;
     }
