@@ -25,6 +25,8 @@ void drawCell(struct Week *w, int day, int hour, bool refresh);
 
 void updateCell(struct Week *w, int d, int h, char *text, bool center);
 
+void colorCellBackground(struct Week *w, int d, int h, int colorpair);
+
 void drawDays(struct Week *w);
 
 #endif

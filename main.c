@@ -4,33 +4,8 @@
 // #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
-//#include "player.h"
 #include "customutils.h"
 #include "week.h"
-
-/*
-void updateCell(struct Day *day, int d, int h, char *text) {
-  mvwprintw(day[d].cells[h], 1, 1, text);
-  refresh();
-  wrefresh(day[d].cells[h]);
-}
-
-void invertCell(struct Day *day, int d, int h, int colorpair) {
-  //mvwprintw(day[d].cells[h], 1, 1, "inverse");
-  wbkgd(day[d].cells[h], COLOR_PAIR(colorpair));
-  refresh();
-  wrefresh(day[d].cells[h]);
-  wattroff(day[d].cells[h], COLOR_PAIR(colorpair));
-}
-*/
-
-/*
-void moveCell(struct Day *day, int d, int h, int numDays, int numHours) {
-   invert
-}
-*/
-
-// move all this to a util file
 
 int main(int argc, char ** argv) {
   // initializes the screen
@@ -42,10 +17,12 @@ int main(int argc, char ** argv) {
   use_default_colors();
   start_color();
 
-  // need 12 timeslots, make it modular tho
-  // array of weekdays
+  // need 12 hours, 7 days, make it modular tho
 
+  //-----------------------------------------------------------------------------
   // important variables
+  //-----------------------------------------------------------------------------
+  
   const char weekdays[7][10] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
   const int numDays = 7;
   const int tableHeight = 37;
@@ -59,12 +36,17 @@ int main(int argc, char ** argv) {
   int currd = 0;
   int currh = 0;
   bool loop = true;
+  bool isHighlighted = true;
   
   WINDOW *mainwin = newwin(tableHeight, (cellWidth-1)*numDays+1, tableYOffset, tableXOffset); // height has to be 1 mod timeslots -> get size of current window and update height
   keypad(mainwin, true);
 
   init_pair(1, -1, -1); // default colors
   init_pair(2, COLOR_BLACK, COLOR_RED);
+
+  //-----------------------------------------------------------------------------
+  // initialization
+  //-----------------------------------------------------------------------------
 
   // write all the day names
   attron(A_BOLD);
@@ -87,31 +69,48 @@ int main(int argc, char ** argv) {
   makeDays(&week);
   drawDays(&week);
 
-  // test writing into cells
-  updateCell(&week, 0, 2, "hewo", false);
+  //highlight current cell
+  colorCellBackground(&week, currd, currh, 2);
 
+  // test writing into cells
+  updateCell(&week, 0, 2, "hewo guys", true);
+  // colorCellBackground(&week, 0, 2, 2);
+
+  //-----------------------------------------------------------------------------
   // main loop
+  //-----------------------------------------------------------------------------
+  
   while (loop) {
     // get keys
     int c = wgetch(mainwin);
     switch (c) {
+      // quit
       case 'q':
         loop=false;
         break;
-      // can you compact the keypress code? so much boilderplate
+      // arrow movement TODO add vim keybinds
       case KEY_UP:
       case KEY_DOWN:
       case KEY_LEFT:
       case KEY_RIGHT:
-        // invertCell(columns, currd, currh, 1);
+        isHighlighted = true;
+        colorCellBackground(&week, currd, currh, 1);
+        drawCell(&week, currd, currh, true);
         if (c==KEY_UP) {currh = max(0, currh-1);}
         else if (c==KEY_DOWN) {currh = min(numHours-1, currh+1);}
         else if (c==KEY_LEFT) {currd = max(0, currd-1);}
         else {currd = min(numDays-1, currd+1);}
-        // invertCell(columns, currd, currh, 2);
+        colorCellBackground(&week, currd, currh, 2);
         break;
+      // toggle highlight
       case ' ':
-        // invertCell(columns, currd, currh, 1);
+        if (isHighlighted) {
+          colorCellBackground(&week, currd, currh, 1);
+          drawCell(&week, currd, currh, true);
+        } else {
+          colorCellBackground(&week, currd, currh, 2);
+        }
+        isHighlighted = !isHighlighted;
       default:
         break;
     }
@@ -121,7 +120,7 @@ int main(int argc, char ** argv) {
     // redraw 
 
     // sleep so we dont have too many useless cycles refreshing
-    usleep(1000 * 8); //about 120 fps
+    usleep(1000 * 8); //about 120 fps //TODO make fps settable from calling from commandline
   }
 
   endwin();
