@@ -1,15 +1,13 @@
 # TODO
-* [ ] refactor so that Days struct is not just a bunch of cols
+* [ ] add commandline flags for: fps, size
+* [ ] vim keybinds
 * [ ] cmake file to compile (dont forget dependencies)
 * [ ] readme
 * [ ] lisence
-* [ ] fix headers
 * [ ] scrollbar
-* [~] colored cells: fix border
 * [~] highlight cycling through cells. perhaps also keybinds for scrolling without cycling through cells?
 * [ ] make way of interacting with cells
 * [ ] automatic resizing & refreshing
-* [ ] utils file
 * [ ] implement icalendar parsing with libical
 * [ ] multiple calendars
 * [ ] multiple entries in one cell
