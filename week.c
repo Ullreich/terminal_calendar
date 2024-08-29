@@ -27,15 +27,13 @@ void refreshCells(struct Week *w) {
 struct Week weekConst(int days, int hours, int tableYOffset, int tableXOffset,  WINDOW *pw) {
   struct Week temp;
 
-  int _;
+  temp.parentWindow = pw;
   temp.tableYOffset = tableYOffset;
   temp.tableXOffset = tableXOffset;
-  getmaxyx(pw, temp.windowHeight, temp.windowLength);
   temp.days = days;
   temp.hours = hours;
-  temp.cellLength = calcCellLength(temp.windowLength, temp.days);
-  temp.cellHeight = calcCellHeight(temp.windowHeight, temp.hours); // might be wrong, test this
-  temp.parentWindow = pw;
+  temp.cellLength = calcCellLength(getmaxx(temp.parentWindow), temp.days);
+  temp.cellHeight = calcCellHeight(getmaxy(temp.parentWindow), temp.hours); // TODO dunno if tableheight is nescessary varaibale
   temp.scrollY = temp.scrollX = 0;
 
 
@@ -112,6 +110,40 @@ void drawDays(struct Week *w) {
       // draw in drawcell so that code is more modular
       drawCell(w, d, h, false);
     }
+  }
+  refreshCells(w);
+}
+
+void scrollDown(struct Week *w) {
+  if (w->scrollY<(getmaxy(w->parentWindow)-(getmaxy(stdscr)-w->tableYOffset))) {
+    ++w->scrollY;
+  }
+  refreshCells(w);
+}
+
+void scrollUp(struct Week *w) {
+  if (w->scrollY>0) {
+    --w->scrollY;
+  }
+  refreshCells(w);
+}
+
+void scrollLeft(struct Week *w) {
+  // increase scrolling speed
+  for (int i=0; i<3; ++i) {
+    if (w->scrollX>0) {
+      --w->scrollX;
+    } else {break;}
+  }
+  refreshCells(w);
+}
+
+void scrollRight(struct Week *w) {
+  // increase scrolling speed 
+  for (int i=0; i<3; ++i) {
+    if (w->scrollX<(getmaxx(w->parentWindow)-(getmaxx(stdscr)-w->tableXOffset))) {
+      ++w->scrollX;
+    } else {break;}
   }
   refreshCells(w);
 }

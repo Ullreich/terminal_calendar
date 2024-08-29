@@ -35,7 +35,7 @@ int main(int argc, char ** argv) {
 
   const char weekdays[7][10] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
   const int numDays = 7;
-  const int tableHeight = 37;
+  const int tableHeight = 37; //tableheight-(maxheightofterminal-cellsoffset) = 37-(15-3);
   const int numHours = 12;
   const int tableXOffset = dayXOffset;
   const int tableYOffset = hourYOffset;
@@ -94,8 +94,13 @@ int main(int argc, char ** argv) {
 
   //-----------------------------------------------------------------------------
   // main loop
-  //-----------------------------------------------------------------------------
-  
+  //----------------------------------------------------------------------------- 
+
+  int garboy, garbox;
+  getmaxyx(stdscr, garboy, garbox);
+  // printf("%d", garboy);
+  // printf("%d", getmaxy(mainwin)-(getmaxy(stdscr)-tableYOffset));
+
   while (loop) {
     // get keys
     int c = wgetch(mainwin);
@@ -105,6 +110,7 @@ int main(int argc, char ** argv) {
         loop=false;
         break;
       // arrow movement TODO add vim keybinds
+      // TODO: should this be in week.c?
       case KEY_UP:
       case KEY_DOWN:
       case KEY_LEFT:
@@ -127,7 +133,26 @@ int main(int argc, char ** argv) {
           colorCellBackground(&week, currd, currh, 2);
         }
         isHighlighted = !isHighlighted;
-      default:
+        break;
+      case 's':
+        scrollDown(&week);
+        break;
+      case 'w':
+        scrollUp(&week);
+        break;
+      case 'd':
+        //++week.scrollX;
+        //refreshCells(&week);
+        scrollRight(&week);
+        break;
+      case 'a':
+        /*
+        --week.scrollX;
+        refreshCells(&week);
+        */
+        scrollLeft(&week);
+        break;
+     default:
         break;
     }
 
