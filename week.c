@@ -15,21 +15,29 @@ int calcCellLength(int windowLength, int days) {
   return (windowLength/days)+1;
 }
 
+void refreshCells(struct Week *w) {
+  prefresh(w->parentWindow, w->scrollY, w->scrollX, w->tableYOffset, w->tableXOffset, getmaxy(stdscr)-1, getmaxx(stdscr)-1);
+}
+
 //------------------------------------------------------------------------------
 // struct week
 //------------------------------------------------------------------------------
 
 // constructor
-struct Week weekConst(int days, int hours, WINDOW *pw) {
+struct Week weekConst(int days, int hours, int tableYOffset, int tableXOffset,  WINDOW *pw) {
   struct Week temp;
 
   int _;
+  temp.tableYOffset = tableYOffset;
+  temp.tableXOffset = tableXOffset;
   getmaxyx(pw, temp.windowHeight, temp.windowLength);
   temp.days = days;
   temp.hours = hours;
   temp.cellLength = calcCellLength(temp.windowLength, temp.days);
   temp.cellHeight = calcCellHeight(temp.windowHeight, temp.hours); // might be wrong, test this
   temp.parentWindow = pw;
+  temp.scrollY = temp.scrollX = 0;
+
 
   return temp;
 }
@@ -38,7 +46,7 @@ void makeDays(struct Week *w) {
   for (int d=0; d<(w->days); ++d) {
     for (int h=0; h<(w->hours); ++h) {
       // init a subwindow at d.cells[day][hour]
-      w->cells[d][h] = derwin(w->parentWindow, w->cellHeight, w->cellLength, (w->cellHeight-1)*h, (w->cellLength-1)*d);
+      w->cells[d][h] = subpad(w->parentWindow, w->cellHeight, w->cellLength, (w->cellHeight-1)*h, (w->cellLength-1)*d);
     }
   }
 }
@@ -75,8 +83,7 @@ void drawCell(struct Week *w, int d, int h, bool refresh) {
   // draw border
   wborder(w->cells[d][h], 0, 0, 0, 0, topleft, topright, bottomleft, bottomright);
   if (refresh) {
-    refresh();
-    wrefresh(w->cells[d][h]);
+    refreshCells(w);
   }
 }
 
@@ -87,8 +94,7 @@ void updateCell(struct Week *w, int d, int h, char *text, bool center) {
     x = centerString(w->cellLength, stringLength(text));
   }
   mvwprintw(w->cells[d][h], y, x, text);
-  refresh();
-  wrefresh(w->cells[d][h]);
+  refreshCells(w);
 }
 
 void colorCellBackground(struct Week *w, int d, int h, int colorpair) {
@@ -96,8 +102,7 @@ void colorCellBackground(struct Week *w, int d, int h, int colorpair) {
   wbkgd(w->cells[d][h], COLOR_PAIR(colorpair));
   // redraw box so it looks fancier
   wborder(w->cells[d][h], 0, 0, 0, 0, ACS_ULCORNER, ACS_URCORNER, ACS_LLCORNER, ACS_LRCORNER);
-  refresh();
-  wrefresh(w->cells[d][h]);
+  refreshCells(w);
   wattroff(w->cells[d][h], COLOR_PAIR(colorpair));
 }
 
@@ -108,6 +113,5 @@ void drawDays(struct Week *w) {
       drawCell(w, d, h, false);
     }
   }
-  refresh();
-  wrefresh(w->parentWindow);
+  refreshCells(w);
 }

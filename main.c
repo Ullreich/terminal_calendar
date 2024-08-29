@@ -22,13 +22,23 @@ int main(int argc, char ** argv) {
   //-----------------------------------------------------------------------------
   // important variables
   //-----------------------------------------------------------------------------
-  
+  int screenMaxy, screeenMaxx;
+  getmaxyx(stdscr, screenMaxy, screeenMaxx);
+  // dims for pad of weekdays, hours and cells
+  int dayYOffset = 3; //TODO hardcoded for now change later I guess
+  int dayXOffset = 10;
+  int hourYOffset = 3;
+  int hourXOffset = 0;
+  int scrollY = 0;
+  int scrollX = 0;
+
+
   const char weekdays[7][10] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
   const int numDays = 7;
   const int tableHeight = 37;
   const int numHours = 12;
-  const int tableXOffset = 10;
-  const int tableYOffset = 3;
+  const int tableXOffset = dayXOffset;
+  const int tableYOffset = hourYOffset;
   const int cellWidth = 25;
   const int cellHeight = calcCellHeight(tableHeight, numHours); 
   const int startTime = 8;
@@ -38,7 +48,10 @@ int main(int argc, char ** argv) {
   bool loop = true;
   bool isHighlighted = true;
   
-  WINDOW *mainwin = newwin(tableHeight, (cellWidth-1)*numDays+1, tableYOffset, tableXOffset); // height has to be 1 mod timeslots -> get size of current window and update height
+  // TODO rename mainwin
+  //WINDOW *mainwin = newwin(tableHeight, (cellWidth-1)*numDays+1, tableYOffset, tableXOffset); // height has to be 1 mod timeslots -> get size of current window and update height
+  WINDOW *mainwin = newpad(tableHeight, (cellWidth-1)*numDays+1); // height has to be 1 mod timeslots -> get size of current window and update height
+  prefresh(mainwin, 0, 0, tableYOffset, tableXOffset, screenMaxy, screeenMaxx); // pad, upper left corner (y,x) to start in,
   keypad(mainwin, true);
 
   init_pair(1, -1, -1); // default colors
@@ -49,6 +62,7 @@ int main(int argc, char ** argv) {
   //-----------------------------------------------------------------------------
 
   // write all the day names
+  // TODO put in pad
   attron(A_BOLD);
   for (int i=0; i<numDays; ++i) {
     // calculate centering offset
@@ -58,14 +72,16 @@ int main(int argc, char ** argv) {
   attroff(A_BOLD);
 
   // write all the times
+  // TODO put in pad
   attron(A_BOLD);
   for (int i=0; i<numHours; ++i) {
     mvprintw(tableYOffset+1 + (cellHeight-1)*i, centerString(tableXOffset, 5), "%d:00", i+startTime); // can have 5 here as long as we dont change string formatting
   }
   attroff(A_BOLD);
+  refresh();
 
   // draw all the cells
-  struct Week week = weekConst(numDays, numHours, mainwin);
+  struct Week week = weekConst(numDays, numHours, tableYOffset, tableXOffset, mainwin);
   makeDays(&week);
   drawDays(&week);
 
