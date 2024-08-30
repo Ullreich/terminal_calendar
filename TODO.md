@@ -1,5 +1,8 @@
 # TODO
-* [ ] rename variables and structs and all to something sane
+* refactor stuff:
+    * [ ] rename variables and structs and all to something sane
+    * [ ] unused variables in main
+    * [ ] sane file hierarchy
 * [ ] memory safety and stuff
 * [ ] unit tests
 * [ ] add commandline flags for: fps, size
