@@ -35,6 +35,8 @@ int main(int argc, char ** argv) {
   int c; // to get input chars
   int currd = 0;
   int currh = 0;
+  int oldy, oldx; // to check if dims changed
+  getmaxyx(stdscr, oldy, oldx);
   bool loop = true;
   bool isHighlighted = true;
   
@@ -76,7 +78,6 @@ int main(int argc, char ** argv) {
   //-----------------------------------------------------------------------------
   // main loop
   //----------------------------------------------------------------------------- 
-
   while (loop) {
     // get keys
     int c = wgetch(mainwin);
@@ -132,7 +133,25 @@ int main(int argc, char ** argv) {
 
     // fix scaling on resizing
 
-    // redraw 
+    // redraw on resize
+    if (getmaxx(stdscr) != oldx || getmaxy(stdscr) != oldy) {
+      // clear colored cell
+      colorCellBackground(&week, currd, currh, 1);
+      drawCell(&week, currd, currh, true);
+      //reset scroll bc doing that math is annoying
+      currd = currh = 0;
+      days.scrollX = 0;
+      hours.scrollY = 0;
+      week.scrollX = week.scrollY = 0;
+      getmaxyx(stdscr, oldy, oldx);
+      drawDays(&days);
+      drawHours(&hours);
+      drawWeek(&week);
+      // redraw
+      if (isHighlighted) {
+        colorCellBackground(&week, currd, currh, 2); //highlight current cell
+      }
+    }
 
     // sleep so we dont have too many useless cycles refreshing
     usleep(1000 * 8); //about 120 fps //TODO make fps settable from calling from commandline
