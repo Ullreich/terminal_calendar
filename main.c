@@ -24,23 +24,11 @@ int main(int argc, char ** argv) {
   //-----------------------------------------------------------------------------
   // important variables
   //-----------------------------------------------------------------------------
-  int screenMaxy, screeenMaxx;
-  getmaxyx(stdscr, screenMaxy, screeenMaxx);
-  // dims for pad of weekdays, hours and cells
-  int dayYOffset = 3; //TODO hardcoded for now change later I guess
-  int dayXOffset = 10;
-  int hourYOffset = 3;
-  int hourXOffset = 0;
-  int scrollY = 0;
-  int scrollX = 0;
-
-
-  const char weekdays[7][10] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
   const int numDays = 7;
-  const int tableHeight = 37; //tableheight-(maxheightofterminal-cellsoffset) = 37-(15-3);
   const int numHours = 12;
-  const int tableXOffset = dayXOffset;
-  const int tableYOffset = hourYOffset;
+  const int tableHeight = 37; //TODO: calculate this from cellHeight not other way around. Do we need this var?
+  const int tableXOffset = 10;
+  const int tableYOffset = 3;
   const int cellWidth = 25;
   const int cellHeight = calcCellHeight(tableHeight, numHours); 
   const int startTime = 8;
@@ -69,17 +57,7 @@ int main(int argc, char ** argv) {
   makeDays(&days);
   drawDays(&days);
 
-
   // write all the times
-  // TODO put in pad
-  /*
-  attron(A_BOLD);
-  for (int i=0; i<numHours; ++i) {
-    mvprintw(tableYOffset+1 + (cellHeight-1)*i, centerString(tableXOffset, 5), "%d:00", i+startTime); // can have 5 here as long as we dont change string formatting
-  }
-  attroff(A_BOLD);
-  refresh();
-  */
   struct Hours hours = hoursConst(tableXOffset, tableYOffset, hourwin);
   makeHours(&hours);
   drawHours(&hours);
@@ -138,7 +116,7 @@ int main(int argc, char ** argv) {
         break;
       case 'w':
         scrollUp(&week);
-        scrollUpHours(&hours);
+        scrollDownHours(&hours);
         break;
       case 'd':
         scrollRight(&week);

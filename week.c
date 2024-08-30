@@ -2,7 +2,6 @@
 #include <ncurses.h>
 #include "week.h"
 #include "customutils.h"
-#include "days.h"
 
 //------------------------------------------------------------------------------
 // struct week
@@ -20,7 +19,6 @@ struct Week weekConst(int days, int hours, int tableYOffset, int tableXOffset,  
   temp.cellLength = calcCellLength(getmaxx(temp.parentWindow), temp.days);
   temp.cellHeight = calcCellHeight(getmaxy(temp.parentWindow), temp.hours); // TODO dunno if tableheight is nescessary varaibale
   temp.scrollY = temp.scrollX = 0;
-
 
   return temp;
 }
@@ -130,6 +128,7 @@ void scrollLeft(struct Week *w) {
 void scrollRight(struct Week *w) {
   // increase scrolling speed 
   for (int i=0; i<3; ++i) {
+    //tableheight-(maxheightofterminal-cellsoffset) = 37-(15-3);
     if (w->scrollX<(getmaxx(w->parentWindow)-(getmaxx(stdscr)-w->tableXOffset))) {
       ++w->scrollX;
     } else {break;}
