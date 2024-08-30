@@ -1,4 +1,7 @@
 # TODO
+* [ ] rename variables and structs and all to something sane
+* [ ] memory safety and stuff
+* [ ] unit tests
 * [ ] add commandline flags for: fps, size
 * [ ] vim keybinds
 * [ ] cmake file to compile (dont forget dependencies)
