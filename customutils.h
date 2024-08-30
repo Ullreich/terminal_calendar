@@ -9,4 +9,8 @@ int stringLength(const char *string);
 
 int centerString(int windowLength, int stringLength);
 
+int calcCellHeight(int windowHeight, int hours);
+
+int calcCellLength(int windowLength, int days);
+
 #endif

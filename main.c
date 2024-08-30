@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include "customutils.h"
 #include "week.h"
+#include "days.h"
+#include "hours.h"
 
 int main(int argc, char ** argv) {
   // initializes the screen
@@ -49,9 +51,10 @@ int main(int argc, char ** argv) {
   bool isHighlighted = true;
   
   // TODO rename mainwin
-  //WINDOW *mainwin = newwin(tableHeight, (cellWidth-1)*numDays+1, tableYOffset, tableXOffset); // height has to be 1 mod timeslots -> get size of current window and update height
   WINDOW *mainwin = newpad(tableHeight, (cellWidth-1)*numDays+1); // height has to be 1 mod timeslots -> get size of current window and update height
-  prefresh(mainwin, 0, 0, tableYOffset, tableXOffset, screenMaxy, screeenMaxx); // pad, upper left corner (y,x) to start in,
+  WINDOW *daywin = newpad(tableYOffset, (cellWidth-1)*numDays+1); // height has to be 1 mod timeslots -> get size of current window and update height
+  WINDOW *hourwin = newpad(tableHeight, tableXOffset); // height has to be 1 mod timeslots -> get size of current window and update height
+  wrefresh(hourwin);
   keypad(mainwin, true);
 
   init_pair(1, -1, -1); // default colors
@@ -62,31 +65,31 @@ int main(int argc, char ** argv) {
   //-----------------------------------------------------------------------------
 
   // write all the day names
-  // TODO put in pad
-  attron(A_BOLD);
-  for (int i=0; i<numDays; ++i) {
-    // calculate centering offset
-    int centerOffset = centerString(cellWidth, stringLength(weekdays[i]));
-    mvprintw(tableYOffset-1, (tableXOffset+1)+(cellWidth-1)*i+centerOffset, weekdays[i]);
-  }
-  attroff(A_BOLD);
+  struct Days days = daysConst(tableYOffset, tableXOffset, daywin);
+  makeDays(&days);
+  drawDays(&days);
+
 
   // write all the times
   // TODO put in pad
+  /*
   attron(A_BOLD);
   for (int i=0; i<numHours; ++i) {
     mvprintw(tableYOffset+1 + (cellHeight-1)*i, centerString(tableXOffset, 5), "%d:00", i+startTime); // can have 5 here as long as we dont change string formatting
   }
   attroff(A_BOLD);
   refresh();
+  */
+  struct Hours hours = hoursConst(tableXOffset, tableYOffset, hourwin);
+  makeHours(&hours);
+  drawHours(&hours);
 
   // draw all the cells
   struct Week week = weekConst(numDays, numHours, tableYOffset, tableXOffset, mainwin);
-  makeDays(&week);
-  drawDays(&week);
-
-  //highlight current cell
-  colorCellBackground(&week, currd, currh, 2);
+  makeWeek(&week);
+  drawWeek(&week);
+  colorCellBackground(&week, currd, currh, 2); //highlight current cell
+  
 
   // test writing into cells
   updateCell(&week, 0, 2, "hewo guys", true);
@@ -95,11 +98,6 @@ int main(int argc, char ** argv) {
   //-----------------------------------------------------------------------------
   // main loop
   //----------------------------------------------------------------------------- 
-
-  int garboy, garbox;
-  getmaxyx(stdscr, garboy, garbox);
-  // printf("%d", garboy);
-  // printf("%d", getmaxy(mainwin)-(getmaxy(stdscr)-tableYOffset));
 
   while (loop) {
     // get keys
@@ -136,21 +134,19 @@ int main(int argc, char ** argv) {
         break;
       case 's':
         scrollDown(&week);
+        scrollDownHours(&hours);
         break;
       case 'w':
         scrollUp(&week);
+        scrollUpHours(&hours);
         break;
       case 'd':
-        //++week.scrollX;
-        //refreshCells(&week);
         scrollRight(&week);
+        scrollRightDays(&days);
         break;
       case 'a':
-        /*
-        --week.scrollX;
-        refreshCells(&week);
-        */
         scrollLeft(&week);
+        scrollLeftDays(&days);
         break;
      default:
         break;

@@ -28,3 +28,11 @@ int centerString(int windowLength, int stringLength) {
 
   return windowHalf-stringHalf-1;
 }
+
+int calcCellHeight(int windowHeight, int hours) {
+  return (windowHeight/hours)+1;
+}
+
+int calcCellLength(int windowLength, int days) {
+  return (windowLength/days)+1;
+}

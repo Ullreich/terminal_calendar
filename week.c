@@ -2,22 +2,7 @@
 #include <ncurses.h>
 #include "week.h"
 #include "customutils.h"
-
-//------------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------------
-
-int calcCellHeight(int windowHeight, int hours) {
-  return (windowHeight/hours)+1;
-}
-
-int calcCellLength(int windowLength, int days) {
-  return (windowLength/days)+1;
-}
-
-void refreshCells(struct Week *w) {
-  prefresh(w->parentWindow, w->scrollY, w->scrollX, w->tableYOffset, w->tableXOffset, getmaxy(stdscr)-1, getmaxx(stdscr)-1);
-}
+#include "days.h"
 
 //------------------------------------------------------------------------------
 // struct week
@@ -40,7 +25,7 @@ struct Week weekConst(int days, int hours, int tableYOffset, int tableXOffset,  
   return temp;
 }
 
-void makeDays(struct Week *w) {
+void makeWeek(struct Week *w) {
   for (int d=0; d<(w->days); ++d) {
     for (int h=0; h<(w->hours); ++h) {
       // init a subwindow at d.cells[day][hour]
@@ -85,6 +70,10 @@ void drawCell(struct Week *w, int d, int h, bool refresh) {
   }
 }
 
+void refreshCells(struct Week *w) {
+  prefresh(w->parentWindow, w->scrollY, w->scrollX, w->tableYOffset, w->tableXOffset, getmaxy(stdscr)-1, getmaxx(stdscr)-1);
+}
+
 void updateCell(struct Week *w, int d, int h, char *text, bool center) {
   int x,y;
   x = y = 1;
@@ -104,7 +93,7 @@ void colorCellBackground(struct Week *w, int d, int h, int colorpair) {
   wattroff(w->cells[d][h], COLOR_PAIR(colorpair));
 }
 
-void drawDays(struct Week *w) {
+void drawWeek(struct Week *w) {
   for (int d=0; d<(w->days); ++d) {
     for (int h=0; h<(w->hours); ++h) {
       // draw in drawcell so that code is more modular

@@ -20,7 +20,7 @@ void refreshCells(struct Week *w);
 
 struct Week weekConst(int days, int hours, int tableYOffset, int tableXOffset, WINDOW *pw);
 
-void makeDays(struct Week *w);
+void makeWeek(struct Week *w);
 
 void drawCell(struct Week *w, int day, int hour, bool refresh);
 
@@ -28,7 +28,7 @@ void updateCell(struct Week *w, int d, int h, char *text, bool center);
 
 void colorCellBackground(struct Week *w, int d, int h, int colorpair);
 
-void drawDays(struct Week *w);
+void drawWeek(struct Week *w);
 
 void scrollDown(struct Week *w);
 
