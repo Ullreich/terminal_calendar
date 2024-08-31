@@ -70,7 +70,6 @@ int main(int argc, char ** argv) {
   drawWeek(&week);
   colorCellBackground(&week, currd, currh, 2); //highlight current cell
   
-
   // test writing into cells
   updateCell(&week, 0, 2, "hewo guys", true);
   // colorCellBackground(&week, 0, 2, 2);
@@ -117,7 +116,7 @@ int main(int argc, char ** argv) {
         break;
       case 'w':
         scrollUp(&week);
-        scrollDownHours(&hours);
+        scrollUpHours(&hours);
         break;
       case 'd':
         scrollRight(&week);
