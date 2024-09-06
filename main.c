@@ -4,10 +4,9 @@
 // #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include "customutils.h"
-#include "week.h"
-#include "days.h"
-#include "hours.h"
+// local inclusions 
+#include <customutils.h>
+#include <components.h>
 
 int main(int argc, char ** argv) {
   // initializes the screen

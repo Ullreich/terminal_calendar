@@ -1,6 +1,6 @@
 #include <curses.h>
 #include <ncurses.h>
-#include "week.h"
+#include "../include_TUI_components/week.h"
 #include "customutils.h"
 
 //------------------------------------------------------------------------------

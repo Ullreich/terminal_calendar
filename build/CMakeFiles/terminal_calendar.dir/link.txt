@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/terminal_calendar.dir/main.c.o -o terminal_calendar 

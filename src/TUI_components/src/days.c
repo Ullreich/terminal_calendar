@@ -1,6 +1,6 @@
 #include <curses.h>
 #include <ncurses.h>
-#include "days.h"
+#include "../include_TUI_components/days.h"
 #include "customutils.h"
 
 const char weekdays[7][10] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
