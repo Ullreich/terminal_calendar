@@ -16,6 +16,7 @@
 * [ ] multiple calendars
 * [ ] multiple entries in one cell (perhaps indicate multiple entries through arrows? and only render biggest entry?)
 * [ ] mouse support: select cell by clicking
+* [ ] cmake: what do INTERFACE PUBLIC and PRIVATE do? look into when to use which keywords
 
 ## libical stuff
 * [ ] doubly linked lists (containing arrays of fixed size?) to store calendar entries? that way easy to append/prepend.

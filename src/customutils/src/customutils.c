@@ -1,5 +1,3 @@
-#include <ncurses.h>
-#include <curses.h>
 #include "customutils.h"
 
 int max(int a, int b) {

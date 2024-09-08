@@ -1,6 +1,3 @@
-
-#include <curses.h>
-#include <ncurses.h>
 #include "hours.h"
 #include "customutils.h"
 

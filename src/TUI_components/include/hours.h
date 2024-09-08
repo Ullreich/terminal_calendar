@@ -3,7 +3,6 @@
 
 #include <curses.h>
 #include <ncurses.h>
-#include "customutils.h"
 
 struct Hours {
   int hourLength, hourHeight, scrollY, hourYOffset;

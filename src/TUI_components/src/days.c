@@ -1,5 +1,3 @@
-#include <curses.h>
-#include <ncurses.h>
 #include "days.h"
 #include "customutils.h"
 

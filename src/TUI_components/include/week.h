@@ -3,7 +3,6 @@
 
 #include <curses.h>
 #include <ncurses.h>
-#include "customutils.h"
 
 int calcCellHeight(int windowHeight, int hours);
 
