@@ -1,7 +1,4 @@
-
-#include <curses.h>
-#include <ncurses.h>
-#include "../include_TUI_components../hours.h"
+#include "hours.h"
 #include "customutils.h"
 
 struct Hours hoursConst(int hourLength, int hourYOffset,  WINDOW *pw) {

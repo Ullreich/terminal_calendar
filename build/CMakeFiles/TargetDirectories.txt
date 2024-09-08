@@ -1,3 +1,0 @@
-/home/noel/projects/terminal_calendar/build/CMakeFiles/terminal_calendar.dir
-/home/noel/projects/terminal_calendar/build/CMakeFiles/edit_cache.dir
-/home/noel/projects/terminal_calendar/build/CMakeFiles/rebuild_cache.dir

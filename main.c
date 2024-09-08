@@ -1,12 +1,8 @@
-#include <curses.h>
-#include <ncurses.h>
-// #include <string.h>
-// #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
 // local inclusions 
 #include <customutils.h>
-#include <components.h>
+#include <aggregator.h>
 
 int main(int argc, char ** argv) {
   // initializes the screen

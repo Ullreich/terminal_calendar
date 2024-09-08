@@ -3,7 +3,6 @@
 
 #include <curses.h>
 #include <ncurses.h>
-#include "customutils.h"
 
 struct Days {
   int dayLength, dayHeight, scrollX, dayXOffset;

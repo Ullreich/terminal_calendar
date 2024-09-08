@@ -1,6 +1,4 @@
-#include <ncurses.h>
-#include <curses.h>
-#include "../include_customutils/customutils.h"
+#include "customutils.h"
 
 int max(int a, int b) {
   return (a>=b)*a + (b>a)*b;

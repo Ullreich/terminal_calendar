@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/noel/projects/terminal_calendar/build",
-  "command": "/usr/bin/cc  -I/home/noel/projects/terminal_calendar/src/customutils -I/home/noel/projects/terminal_calendar/src/TUI_components  -o CMakeFiles/terminal_calendar.dir/main.c.o -c /home/noel/projects/terminal_calendar/main.c",
-  "file": "/home/noel/projects/terminal_calendar/main.c"
-}
-]
