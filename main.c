@@ -66,6 +66,7 @@ int main(int argc, char ** argv) {
   // draw all the cells
   struct Week week = weekConst(numDays, numHours, tableYOffset, tableXOffset, mainwin);
   makeWeek(&week);
+  drawWeek(&week);
   colorCellBackground(&week, currd, currh, 2); //highlight current cell
  
   // write summary in cells
@@ -76,8 +77,6 @@ int main(int argc, char ** argv) {
   }
   timetableWeekFill(&week, argv[1]);
   timetableWeekWrite(&week);
-
-  drawWeek(&week);
   
   // test writing into cells
   //updateCell(&week, 0, 2, "hewo guys", true);
