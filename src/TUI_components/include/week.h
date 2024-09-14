@@ -12,7 +12,9 @@ int calcCellLength(int windowLength, int days);
 struct Week {
   int days, hours, cellLength, cellHeight, scrollY, scrollX, tableYOffset, tableXOffset;
   WINDOW *parentWindow;
+  // these three should maybe be wrapped by a struct?
   WINDOW *cells[7][12]; // TODO: fix this so its not static: https://stackoverflow.com/questions/17250480/declaring-int-array-inside-struct
+  WINDOW *textCells[7][12];
   icalcomponent *cellsContent[7][12];
 };
 

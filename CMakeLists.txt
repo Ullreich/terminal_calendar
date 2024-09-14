@@ -18,4 +18,4 @@ target_link_libraries(${PROJECT_NAME}
 # This loads the external libs. 
 # TODO: check if they are installed
 target_link_libraries(${PROJECT_NAME} libical.so.3)
-target_link_libraries(${PROJECT_NAME} ncurses)
+target_link_libraries(${PROJECT_NAME} ncursesw)

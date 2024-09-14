@@ -65,6 +65,7 @@ void timetableWeekWrite(struct Week *w) {
       // write summary of event to cell
       if (w->cellsContent[d][h]) { // make sure cell isnt empty 
         char *text = componentToSummaryText(w->cellsContent[d][h]);
+        //char *text = "Theoretische Informatik (U) D. Komm/ H. Boeckenhauer/ J. Hromkovic";
         updateCell(w, d, h, text, false);
       }
     }

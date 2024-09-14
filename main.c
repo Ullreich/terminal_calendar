@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <locale.h>
 // local inclusions 
 #include <customutils.h>
 #include <TUI_aggregator.h>
@@ -9,6 +10,7 @@
 int main(int argc, char ** argv) {
   // initializes the screen
   // sets up memory and clears the screen
+  setlocale(LC_ALL, "en_US.UTF-8"); // needed to correctly render special characters such as umlauts
   initscr();
   noecho();
   nodelay(stdscr, true);
@@ -64,7 +66,6 @@ int main(int argc, char ** argv) {
   // draw all the cells
   struct Week week = weekConst(numDays, numHours, tableYOffset, tableXOffset, mainwin);
   makeWeek(&week);
-  drawWeek(&week);
   colorCellBackground(&week, currd, currh, 2); //highlight current cell
  
   // write summary in cells
@@ -76,6 +77,8 @@ int main(int argc, char ** argv) {
   timetableWeekFill(&week, argv[1]);
   timetableWeekWrite(&week);
 
+  drawWeek(&week);
+  
   // test writing into cells
   //updateCell(&week, 0, 2, "hewo guys", true);
   // colorCellBackground(&week, 0, 2, 2);

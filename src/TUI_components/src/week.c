@@ -33,6 +33,7 @@ void makeWeek(struct Week *w) {
     for (int h=0; h<(w->hours); ++h) {
       // init a subwindow at d.cells[day][hour]
       w->cells[d][h] = subpad(w->parentWindow, w->cellHeight, w->cellLength, (w->cellHeight-1)*h, (w->cellLength-1)*d);
+      w->textCells[d][h] = subpad(w->cells[d][h], w->cellHeight-2, w->cellLength-2, 1, 1);
     }
   }
 }
@@ -80,11 +81,11 @@ void refreshCells(struct Week *w) {
 
 void updateCell(struct Week *w, int d, int h, char *text, bool center) {
   int x,y;
-  x = y = 1;
+  x = y = 0;
   if (center) {
     x = centerString(w->cellLength, stringLength(text));
   }
-  mvwprintw(w->cells[d][h], y, x, text);
+  mvwprintw(w->textCells[d][h], y, x, text);
   refreshCells(w);
 }
 
