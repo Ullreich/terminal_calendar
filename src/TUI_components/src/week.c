@@ -18,6 +18,13 @@ struct Week weekConst(int days, int hours, int tableYOffset, int tableXOffset,  
   temp.cellHeight = calcCellHeight(getmaxy(temp.parentWindow), temp.hours); // TODO dunno if tableheight is nescessary varaibale
   temp.scrollY = temp.scrollX = 0;
 
+  // fill cellsContent with null or something
+  for (int d=0; d<days; ++d) {
+    for (int h=0; h<hours; ++h) {
+      temp.cellsContent[d][h] = NULL;
+    }
+  }
+
   return temp;
 }
 
@@ -31,6 +38,7 @@ void makeWeek(struct Week *w) {
 }
 
 void drawCell(struct Week *w, int d, int h, bool refresh) {
+  // border
   int topleft, topright, bottomleft, bottomright;
   topleft = topright = bottomleft = bottomright = ACS_PLUS;
 

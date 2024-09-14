@@ -3,6 +3,7 @@ project(terminal_calendar)
 
 # build the libraries
 add_subdirectory(src/customutils)
+add_subdirectory(src/libical_components)
 add_subdirectory(src/TUI_components)
 
 add_executable(${PROJECT_NAME} main.c)
@@ -11,6 +12,7 @@ add_executable(${PROJECT_NAME} main.c)
 target_link_libraries(${PROJECT_NAME}
     # sub::customutils # already linked in TUI_components
     sub::TUI_components
+    sub::libical_components
 )
 
 # This loads the external libs. 

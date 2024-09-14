@@ -1,8 +1,10 @@
 #include <stdbool.h>
+#include <stdlib.h>
 #include <unistd.h>
 // local inclusions 
 #include <customutils.h>
-#include <aggregator.h>
+#include <TUI_aggregator.h>
+#include <libical_utils.h>
 
 int main(int argc, char ** argv) {
   // initializes the screen
@@ -64,9 +66,18 @@ int main(int argc, char ** argv) {
   makeWeek(&week);
   drawWeek(&week);
   colorCellBackground(&week, currd, currh, 2); //highlight current cell
-  
+ 
+  // write summary in cells
+  // TODO: better error handling
+  if (!argv[1]) {
+    printf("no .ical file added");
+    exit(1);
+  }
+  timetableWeekFill(&week, argv[1]);
+  timetableWeekWrite(&week);
+
   // test writing into cells
-  updateCell(&week, 0, 2, "hewo guys", true);
+  //updateCell(&week, 0, 2, "hewo guys", true);
   // colorCellBackground(&week, 0, 2, 2);
 
   //-----------------------------------------------------------------------------

@@ -3,6 +3,7 @@
 
 #include <curses.h>
 #include <ncurses.h>
+#include <libical/ical.h>
 
 int calcCellHeight(int windowHeight, int hours);
 
@@ -12,7 +13,7 @@ struct Week {
   int days, hours, cellLength, cellHeight, scrollY, scrollX, tableYOffset, tableXOffset;
   WINDOW *parentWindow;
   WINDOW *cells[7][12]; // TODO: fix this so its not static: https://stackoverflow.com/questions/17250480/declaring-int-array-inside-struct
-  // probably gonna need a cell struct or something
+  icalcomponent *cellsContent[7][12];
 };
 
 void refreshCells(struct Week *w);

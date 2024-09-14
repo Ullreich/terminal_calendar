@@ -3,6 +3,9 @@
     * [ ] rename variables and structs and all to something sane
     * [ ] refactor so that you select cellsize not table dims
     * [ ] have all the X and Y vars scrolls be the same?
+* [ ] fix/do error handling of: no colors in terminal, no ical file added and more
+* [ ] fix char/const char issue
+* [ ] look at guards in headerfiles
 * [ ] screen scrolling automatical when you move to cells past end of screen 
 * [ ] memory safety and stuff
 * [ ] unit tests (see cmake)
